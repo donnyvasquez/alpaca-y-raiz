@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alpaca & Raíz | Por Sonia Aranda Diaz</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Montserrat:wght@300;400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    /* Paleta de colores y variables */
+    :root {
+      --bg-color: #f9f8f6;
+      --text-main: #2b2b2b;
+      --text-muted: #5a5a5a;
+      --accent: #8b7355;
+      /* Tono tierra sofisticado */
+      --accent-hover: #6e5b42;
+      --white: #ffffff;
+      --border-light: #e5e5e5;
+      --font-title: 'Cormorant Garamond', serif;
+      --font-body: 'Montserrat', sans-serif;
+    }
+
+    /* Estilos Base */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      line-height: 1.6;
+      padding: 0 20px;
+    }
+
+    /* Cabecera */
+    header {
+      text-align: center;
+      padding: 80px 0 60px;
+    }
+
+    header h1 {
+      font-family: var(--font-title);
+      font-size: 3.5rem;
+      font-weight: 400;
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+    }
+
+    header p {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: var(--text-muted);
+    }
+
+    /* Contenedor del Portafolio */
+    .portfolio-grid {
+      max-width: 1200px;
+      margin: 0 auto 80px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 40px;
+    }
+
+    /* Tarjeta de Producto */
+    .card {
+      background: var(--white);
+      border: 1px solid var(--border-light);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.05);
+    }
+
+    .card-img {
+      width: 100%;
+      height: 350px;
+      object-fit: cover;
+    }
+
+    .card-content {
+      padding: 25px;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+    .card-title {
+      font-family: var(--font-title);
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+    }
+
+    .card-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+      flex-grow: 1;
+    }
+
+    .btn-interesa {
+      background-color: transparent;
+      color: var(--text-main);
+      border: 1px solid var(--text-main);
+      padding: 12px 0;
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      width: 100%;
+    }
+
+    .btn-interesa:hover {
+      background-color: var(--text-main);
+      color: var(--white);
+    }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      z-index: 1000;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-content {
+      background: var(--white);
+      width: 90%;
+      max-width: 1000px;
+      max-height: 90vh;
+      display: flex;
+      position: relative;
+      overflow: hidden;
+      flex-direction: column;
+    }
+
+    @media (min-width: 768px) {
+      .modal-content {
+        flex-direction: row;
+      }
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      font-size: 2rem;
+      color: var(--text-main);
+      cursor: pointer;
+      z-index: 10;
+      background: none;
+      border: none;
+    }
+
+    /* Slider del Modal */
+    .modal-media {
+      flex: 1;
+      background: #f0f0f0;
+      position: relative;
+      min-height: 400px;
+    }
+
+    .media-slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    .media-slide.active {
+      opacity: 1;
+      z-index: 1;
+    }
+
+    .slider-controls {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      z-index: 2;
+    }
+
+    .slider-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.5);
+      cursor: pointer;
+      border: 1px solid var(--text-main);
+    }
+
+    .slider-dot.active {
+      background: var(--text-main);
+    }
+
+    /* Detalles del Modal */
+    .modal-details {
+      flex: 1;
+      padding: 50px 40px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .modal-title {
+      font-family: var(--font-title);
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+    }
+
+    .modal-story {
+      font-size: 1rem;
+      color: var(--text-muted);
+      margin-bottom: 30px;
+      line-height: 1.8;
+    }
+
+    .tags-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 40px;
+    }
+
+    .tag {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      background: var(--bg-color);
+      padding: 5px 12px;
+      border: 1px solid var(--border-light);
+      color: var(--text-muted);
+    }
+
+    .btn-comprar {
+      background-color: var(--accent);
+      color: var(--white);
+      border: none;
+      padding: 15px 0;
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      width: 100%;
+      margin-top: auto;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-comprar:hover {
+      background-color: var(--accent-hover);
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>Alpaca & Raíz</h1>
+    <p>Por Sonia Aranda Díaz</p>
+  </header>
+
+  <main class="portfolio-grid" id="portfolio-grid">
+  </main>
+
+  <div class="modal-overlay" id="modal">
+    <div class="modal-content">
+      <button class="close-btn" onclick="closeModal()">&times;</button>
+
+      <div class="modal-media">
+        <img src="" alt="" class="media-slide active" id="modal-img">
+        <video src="" class="media-slide" id="modal-video" loop muted playsinline></video>
+
+        <div class="slider-controls">
+          <div class="slider-dot active" onclick="showSlide(0)"></div>
+          <div class="slider-dot" onclick="showSlide(1)"></div>
+        </div>
+      </div>
+
+      <div class="modal-details">
+        <h2 class="modal-title" id="modal-title">Título</h2>
+        <div class="modal-story" id="modal-story">Descripción</div>
+        <div class="tags-container" id="modal-tags">
+        </div>
+        <a href="#" class="btn-comprar" id="modal-comprar" target="_blank">Comprar producto</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Número de WhatsApp de Sonia (Incluir código de país sin el +)
+    const numeroWhatsapp = "573001234567";
+
+    // ARREGLO DE OBJETOS: Tu catálogo actualizado
+    const productos = [
+      {
+        id: "art-taupe-01",
+        titulo: "Ritual de Calma Taupe",
+        descCorta: "Set ceremonial de vela artesanal y apagavelas de diseño.",
+        storytelling: "Hay momentos que exigen un cierre sagrado. El Ritual de Calma Taupe nace de la necesidad de pausar el tiempo al final de la jornada. La vela, resguardada en un vidrio soplado de tono ámbar profundo, proyecta una luz cálida que danza con las sombras, mientras que los apagavelas —un equilibrio perfecto entre madera torneada y metal pulido— permiten extinguir la llama con la elegancia que el silencio merece. Una pieza donde la funcionalidad se convierte en un acto de presencia y serenidad.",
+        materiales: ["Vidrio Ámbar Soplado", "Madera de Haya", "Cromo Pulido", "Cera de Soya Natural"],
+        img: "art-taupe-01.jpg",
+        vid: "art-taupe-01.mp4"
+      },
+      {
+        id: "art-reflect-02",
+        titulo: "Set Ceremonial Reflejos",
+        descCorta: "Dúo de cuencos en acero martillado y liso sobre bases de madera noble.",
+        storytelling: "Esta composición de mesa redefine la elegancia funcional a través del contraste. El Set Ceremonial Reflejos juega con la percepción de la luz: un cuenco presenta un martillado manual minucioso que fragmenta los reflejos en mil destellos, mientras que su par ofrece un brillo espejo que invita a la introspección. Cada pieza descansa sobre un zócalo de madera maciza, rescatada y tratada con aceites orgánicos. Las cucharas de servicio, con mangos torneados con precisión, completan este conjunto diseñado para transformar el acto de compartir en un ritual de sofisticación táctil.",
+        materiales: ["Acero Inoxidable Martillado", "Madera de Roble Recuperada", "Acero Pulido de Grado Alimenticio", "Aceites Vegetales de Acabado"],
+        img: "art-reflect-02.jpg",
+        vid: "art-reflect-02.mp4"
+      },
+      {
+        id: "art-bronce-03",
+        titulo: "Señalador Tótem Áureo",
+        descCorta: "Marcador de libros en latón pulido con silueta de tótem ancestral.",
+        storytelling: "Para quienes ven en la lectura un viaje espiritual, el Señalador Tótem Áureo es el guardián de sus páginas. Tallado en una fina lámina de latón de alto brillo, su silueta evoca las figuras totémicas que resguardaban el conocimiento en las culturas antiguas. Su diseño simétrico y minimalista no solo marca un lugar en el papel, sino que añade un destello de luz a cada pausa literaria, convirtiendo el libro en un objeto de exhibición. Es una joya funcional para el lector que valora la sofisticación en los detalles más pequeños.",
+        materiales: ["Latón Macizo", "Pulido Espejo", "Corte de Precisión de Alta Definición"],
+        img: "art-bronce-03.jpg",
+        vid: "art-bronce-03.mp4"
+      },
+      {
+        id: "art-bronce-04",
+        titulo: "Señalador Danza de Latón",
+        descCorta: "Marcador de libros artesanal con silueta fluida en acabado dorado.",
+        storytelling: "Inspirado en la fluidez de las ideas y el movimiento constante de la imaginación, el Señalador Danza de Latón es una oda a la libertad creativa. Su silueta orgánica y caprichosa parece cobrar vida entre las páginas, actuando como un recordatorio de que cada lectura es una coreografía de palabras. Pulida artesanalmente hasta alcanzar un brillo que refleja cada matiz de la luz, esta pieza de latón macizo no es solo un accesorio, sino una pequeña escultura que celebra el placer estético de un buen libro.",
+        materiales: ["Latón Macizo de Alto Calibre", "Pulido Manual de Gran Espejo", "Diseño Orgánico Exclusivo"],
+        img: "art-bronce-04.jpg",
+        vid: "art-bronce-04.mp4"
+      },
+      {
+        id: "art-bambu-05",
+        titulo: "Servidores Raíz de Bambú",
+        descCorta: "Set de servidores para ensalada con mangos tallados estilo bambú y acero espejado.",
+        storytelling: "La rítmica estructura de la naturaleza se traslada a la mesa con los Servidores Raíz de Bambú. Cada mango ha sido tallado minuciosamente para emular la fuerza y flexibilidad del bambú, utilizando una madera de tono borgoña profundo que aporta una calidez táctil inigualable. El contraste con las palas de acero inoxidable de alto brillo crea una pieza de servicio que es, en sí misma, una declaración de estilo. Diseñados para ser el centro de atención en cenas memorables, estos utensilios equilibran la ergonomía con el lujo orgánico, convirtiendo el servicio de alimentos en un gesto de pura elegancia.",
+        materiales: ["Madera Noble Tallada a Mano", "Acero Inoxidable Pulido Espejo", "Tratamiento con Ceras Naturales"],
+        img: "art-bambu-05.jpg",
+        vid: "art-bambu-05.mp4"
+      },
+      {
+        id: "art-minimal-06",
+        titulo: "Candelabro Pétalo de Acero",
+        descCorta: "Soporte minimalista para vela en acero pulido con plato de servicio a juego.",
+        storytelling: "La luz encuentra su espejo en el Candelabro Pétalo de Acero. Diseñado con una silueta orgánica que huye de la geometría rígida, este soporte parece brotar de la superficie donde descansa como una gota de metal líquido. El acero ha sido trabajado meticulosamente hasta alcanzar un brillo impecable, permitiendo que la llama de la vela se duplique en su base y cree un ambiente de quietud y lujo contemporáneo.",
+        materiales: ["Acero Inoxidable de Alto Brillo", "Vela de Cera de Lujo", "Forja en Frío Artesanal", "Base Protectora de Terciopelo"],
+        img: "art-minimal-06.jpg",
+        vid: "art-minimal-06.mp4"
+      },
+      {
+        id: "art-empaque-07",
+        titulo: "Experiencia de Apertura: Origen",
+        descCorta: "Presentación exclusiva en papel texturizado carbón y lazo de seda plateado.",
+        storytelling: "En Alpaca & Raíz, creemos que el regalo comienza con la mirada. Nuestra Experiencia de Apertura ha sido diseñada para ser el preludio de un encuentro con la belleza. Cada pieza se resguarda en sobres de papel texturizado de alta densidad en tono carbón, plegados manualmente con precisión arquitectónica.",
+        materiales: ["Papel de Fibra Reciclada de Alta Densidad", "Cinta de Seda Satinada", "Sello de Autenticidad Alpaca & Raíz"],
+        img: "art-empaque-07.jpg",
+        vid: "art-empaque-07.mp4"
+      },
+      {
+        id: "art-alquimia-08",
+        titulo: "Dúo Alquimia de Altar",
+        descCorta: "Set de apagavelas y dosificador ritual con mangos de madera torneada.",
+        storytelling: "Para los rituales que transforman lo cotidiano en algo sagrado, el Dúo Alquimia de Altar ofrece una precisión impecable. Este set combina un apagavelas de campana clásica con un dosificador de forma cónica, ambos elevados por mangos de madera noble tallados con una ergonomía que invita a la calma.",
+        materiales: ["Acero Inoxidable de Grado Quirúrgico", "Madera Noble con Acabado Satinado", "Detalles de Ensamblaje en Cromo"],
+        img: "art-alquimia-08.jpg",
+        vid: "art-alquimia-08.mp4"
+      },
+      {
+        id: "art-patera-09",
+        titulo: "Dúo Patera Martillada",
+        descCorta: "Platos rituales de acero martillado con mangos largos de madera noble.",
+        storytelling: "Inspiradas en los recipientes de ofrenda de las culturas antiguas, estas pateras combinan la fuerza del acero con la calidez de la madera tallada. El martillado manual crea una superficie vibrante que juega con los reflejos, ideal para sostener inciensos o elementos de luz.",
+        materiales: ["Acero Inoxidable Martillado", "Madera de Cedro Torneada", "Unión Reforzada en Acero Pulido"],
+        img: "art-patera-09.jpg",
+        vid: "art-patera-09.mp4"
+      },
+      {
+        id: "art-tablon-10",
+        titulo: "Set de Degustación Cobalto",
+        descCorta: "Cuarteto de cuchillos para quesos con mangos en madera y laca azul sobre tablón.",
+        storytelling: "La mesa es el escenario donde se comparten las mejores historias. El Set de Degustación Cobalto ha sido diseñado para elevar el acto de compartir una tabla de quesos a un nivel de autor. Este conjunto de cuatro piezas combina la precisión del acero inoxidable con mangos de madera noble.",
+        materiales: ["Acero Inoxidable de Grado Alimenticio", "Nogal y Laca Azul", "Tablón de Madera Maciza"],
+        img: "art-tablon-10.jpg",
+        vid: "art-tablon-10.mp4"
+      }
+    ];
+
+    const grid = document.getElementById('portfolio-grid');
+    const modal = document.getElementById('modal');
+
+    // Renderizar Tarjetas
+    function renderizarPortafolio() {
+      grid.innerHTML = productos.map(producto => `
+                <div class="card">
+                    <img src="${producto.img}" alt="${producto.titulo}" class="card-img" onerror="this.src='https://via.placeholder.com/400x350?text=Imagen+en+proceso'">
+                    <div class="card-content">
+                        <h3 class="card-title">${producto.titulo}</h3>
+                        <p class="card-desc">${producto.descCorta}</p>
+                        <button class="btn-interesa" onclick="abrirModal('${producto.id}')">Me interesa</button>
+                    </div>
+                </div>
+            `).join('');
+    }
+
+    // Funciones del Modal
+    function abrirModal(id) {
+      const prod = productos.find(p => p.id === id);
+      if (!prod) return;
+
+      document.getElementById('modal-img').src = prod.img;
+      document.getElementById('modal-video').src = prod.vid;
+      document.getElementById('modal-title').textContent = prod.titulo;
+      document.getElementById('modal-story').textContent = prod.storytelling;
+
+      // Renderizar Tags
+      document.getElementById('modal-tags').innerHTML = prod.materiales
+        .map(mat => `<span class="tag">${mat}</span>`).join('');
+
+      // Configurar enlace de WhatsApp
+      const mensaje = encodeURIComponent(`Hola Sonia, me interesa el producto código ${prod.id} (${prod.titulo}). ¿Me podrías dar más información?`);
+      document.getElementById('modal-comprar').href = `https://wa.me/${numeroWhatsapp}?text=${mensaje}`;
+
+      modal.classList.add('active');
+      showSlide(0); // Empezar siempre con la foto
+    }
+
+    function closeModal() {
+      modal.classList.remove('active');
+      document.getElementById('modal-video').pause(); // Pausar video al cerrar
+    }
+
+    // Lógica del Slider (Foto vs Video 360)
+    function showSlide(index) {
+      const slides = document.querySelectorAll('.media-slide');
+      const dots = document.querySelectorAll('.slider-dot');
+      const video = document.getElementById('modal-video');
+
+      slides.forEach(s => s.classList.remove('active'));
+      dots.forEach(d => d.classList.remove('active'));
+
+      slides[index].classList.add('active');
+      dots[index].classList.add('active');
+
+      if (index === 1) {
+        video.play();
+      } else {
+        video.pause();
+        video.currentTime = 0;
+      }
+    }
+
+    // Inicializar
+    renderizarPortafolio();
+
+    // Cerrar modal al hacer clic afuera
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeModal();
+    });
+  </script>
+</body>
+
+</html>
