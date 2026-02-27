@@ -174,12 +174,12 @@
       font-size: 2rem;
       color: var(--text-main);
       cursor: pointer;
-      z-index: 10;
+      z-index: 20;
       background: none;
       border: none;
     }
 
-    /* Slider del Modal */
+    /* Media Area (Slider) */
     .modal-media {
       flex: 1;
       background: #f0f0f0;
@@ -226,13 +226,28 @@
       background: var(--text-main);
     }
 
-    /* Detalles del Modal */
+    /* Detalles del Modal (Layout para botón fijo) */
     .modal-details {
       flex: 1;
-      padding: 50px 40px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      /* Evita que el contenedor padre haga scroll */
+    }
+
+    .modal-info-scroll {
+      flex: 1;
+      padding: 50px 40px 10px 40px;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
+    }
+
+    .modal-action-fixed {
+      padding: 10px 40px 40px 40px;
+      background: var(--white);
+      border-top: 1px solid rgba(0, 0, 0, 0.05);
+      /* Separador sutil */
     }
 
     .modal-title {
@@ -277,7 +292,6 @@
       cursor: pointer;
       transition: background 0.3s ease;
       width: 100%;
-      margin-top: auto;
       text-align: center;
       text-decoration: none;
       display: inline-block;
@@ -314,20 +328,23 @@
       </div>
 
       <div class="modal-details">
-        <h2 class="modal-title" id="modal-title">Título</h2>
-        <div class="modal-story" id="modal-story">Descripción</div>
-        <div class="tags-container" id="modal-tags">
+        <!-- Parte desplazable del modal -->
+        <div class="modal-info-scroll">
+          <h2 class="modal-title" id="modal-title">Título</h2>
+          <div class="modal-story" id="modal-story">Descripción</div>
+          <div class="tags-container" id="modal-tags"></div>
         </div>
-        <a href="#" class="btn-comprar" id="modal-comprar" target="_blank">Comprar producto</a>
+        <!-- Parte fija del modal -->
+        <div class="modal-action-fixed">
+          <a href="#" class="btn-comprar" id="modal-comprar" target="_blank">Comprar producto</a>
+        </div>
       </div>
     </div>
   </div>
 
   <script>
-    // Número de WhatsApp de Sonia (Incluir código de país sin el +)
     const numeroWhatsapp = "573003472549";
 
-    // ARREGLO DE OBJETOS: Tu catálogo actualizado
     const productos = [
       {
         id: "art-taupe-01",
@@ -458,6 +475,9 @@
 
       modal.classList.add('active');
       showSlide(0); // Empezar siempre con la foto
+
+      // Resetear scroll del contenido informativo
+      document.querySelector('.modal-info-scroll').scrollTop = 0;
     }
 
     function closeModal() {
