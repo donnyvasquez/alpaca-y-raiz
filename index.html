@@ -502,7 +502,7 @@
     function renderizarPortafolio() {
       grid.innerHTML = productos.map(producto => `
                 <div class="card">
-                    <img src="${producto.img}" alt="${producto.titulo}" class="card-img" onerror="this.src='https://via.placeholder.com/400x350?text=Imagen+en+proceso'">
+                    <img src="${producto.img}" alt="${producto.titulo}" class="card-img" onerror="this.src='https://placehold.co/400x350?text=Imagen+en+proceso'">
                     <div class="card-content">
                         <h3 class="card-title">${producto.titulo}</h3>
                         <p class="card-desc">${producto.descCorta}</p>
