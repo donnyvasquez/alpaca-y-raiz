@@ -163,7 +163,7 @@
 
     .card-img {
       width: 100%;
-      height: 250px;
+      aspect-ratio: 1/1;
       object-fit: cover;
     }
 
@@ -233,7 +233,7 @@
       background: var(--white);
       width: 90%;
       max-width: 1000px;
-      max-height: 75vh;
+      max-height: 90vh;
       display: flex;
       position: relative;
       overflow: hidden;
@@ -243,6 +243,7 @@
     @media (min-width: 768px) {
       .modal-content {
         flex-direction: row;
+        max-height: 75vh;
       }
     }
 
@@ -256,6 +257,14 @@
       z-index: 20;
       background: none;
       border: none;
+      width: 40px;
+      aspect-ratio: 1 / 1;
+      border-radius: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .close-btn:hover {
+      background-color: var(--bg-color);
     }
 
     /* Media Area (Slider) */
