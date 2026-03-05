@@ -343,8 +343,8 @@
       right: 12px;
     }
 
-    .slider-arrow.hidden {
-      display: none;
+    .hidden {
+      display: none !important;
     }
 
     /* Botón de video (Play) */
@@ -810,10 +810,12 @@
       // Generar dots de navegación
       const dotsContainer = document.getElementById('slider-dots');
       if (totalSlides > 1) {
+        dotsContainer.classList.remove('hidden');
         dotsContainer.innerHTML = prod.imagenes.map((_, i) =>
           `<div class="slider-dot ${i === 0 ? 'active' : ''}" onclick="goToSlide(${i})"></div>`
         ).join('');
       } else {
+        dotsContainer.classList.add('hidden');
         dotsContainer.innerHTML = '';
       }
 
