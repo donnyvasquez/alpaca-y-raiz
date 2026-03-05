@@ -135,6 +135,16 @@
       .acerca-de-img {
         max-width: 100%;
       }
+
+      .btn-play-video {
+        top: auto;
+        bottom: 56px;
+      }
+
+      .btn-close-video {
+        top: auto;
+        bottom: 64px;
+      }
     }
 
     /* Contenedor del Portafolio */
@@ -249,7 +259,7 @@
 
     .close-btn {
       position: absolute;
-      bottom: 15px;
+      top: 15px;
       right: 20px;
       font-size: 2rem;
       color: var(--text-main);
@@ -359,10 +369,11 @@
     /* Botón de video (Play) */
     .btn-play-video {
       position: absolute;
-      bottom: 12px;
+      top: 12px;
       right: 12px;
+      bottom: auto;
       z-index: 3;
-      background: rgba(0, 0, 0, 0.65);
+      background: rgba(158, 75, 75, 65%);
       border: none;
       width: 64px;
       height: 40px;
@@ -376,7 +387,7 @@
     }
 
     .btn-play-video:hover {
-      background: rgba(0, 0, 0, 0.85);
+      background: rgb(173, 0, 0);
     }
 
     .btn-play-video svg {
@@ -417,6 +428,7 @@
       position: absolute;
       top: 12px;
       right: 12px;
+      bottom: auto;
       z-index: 6;
       background: rgba(255, 255, 255, 0.85);
       border: none;
